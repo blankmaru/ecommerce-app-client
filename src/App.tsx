@@ -5,9 +5,7 @@ function App() {
   const [users, setUsers] = useState<Array<any>>([])
 
   useEffect(() => {
-    Axios.get('http://46.101.154.231/api/users', {
-      withCredentials: true
-    })
+    Axios.get('http://46.101.154.231/api/users')
     .then((res: AxiosResponse) => {
       setUsers(res.data)
     })
