@@ -1,21 +1,24 @@
-import Axios, { AxiosResponse } from 'axios';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import 'semantic-ui-css/semantic.min.css';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { Container } from 'semantic-ui-react';
+
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Footer from './components/Footer';
 
 function App() {
-  const [users, setUsers] = useState<Array<any>>([])
-
-  useEffect(() => {
-    Axios.get('http://46.101.154.231/api/users')
-    .then((res: AxiosResponse) => {
-      setUsers(res.data)
-    })
-  }, [])
-
-  return (
-    <div>
-      {users.map((item) => <div>{item.username}</div>)}
-    </div>
-  );
+	return (
+    <BrowserRouter>
+        <Navbar />
+        <Switch>
+          <Container text style={{ marginTop: '7em' }}>
+            <Route path='/' exact component={Home} />
+          </Container>
+        </Switch>
+        <Footer />
+    </BrowserRouter>
+	);
 }
 
 export default App;
