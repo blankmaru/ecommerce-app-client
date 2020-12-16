@@ -10,6 +10,7 @@ import Admin from './pages/Admin';
 import Profile from './pages/Profile';
 import Orders from './pages/Orders';
 import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
 
 const App: FC = () => {
 	return (
@@ -17,14 +18,15 @@ const App: FC = () => {
         <Navbar />
         <Switch>
           <Container style={{ marginTop: '7em' }}>
-            <Route path='/products' exact component={Products} />
+            <Route path='/' exact component={Products} />
             <Route path='/admin' exact component={Admin} />
             <Route path='/profile' exact component={Profile} />
             <Route path='/orders' exact component={Orders} />
             <Route path='/login' exact component={Login} />
+            <Route path='/register' exact component={Register} />
           </Container>
         </Switch>
-        <Footer />
+        {/* <Footer /> */}
     </BrowserRouter>
 	);
 }

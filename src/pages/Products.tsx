@@ -1,16 +1,18 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useContext, useEffect, useState } from 'react';
 import { Grid, Header } from 'semantic-ui-react';
-import { Product } from '../interfaces/interfaces';
+import { IProduct } from '../interfaces/interfaces';
 import axios, { AxiosResponse } from 'axios';
 import { Button, Card } from 'semantic-ui-react';
 import { BiBasket } from 'react-icons/bi';
+import { apiURL } from '../config';
+import { myContext } from '../context';
 
 const Products: FC = () => {
-	const [products, setProducts] = useState<Array<Product>>([]);
+	const ctx = useContext(myContext)
+	const [products, setProducts] = useState<Array<IProduct>>([]);
 
 	useEffect(() => {
-		axios.get('http://46.101.154.231/api/products').then((res: AxiosResponse) => {
-			console.log(res.data);
+		axios.get(`${apiURL}/api/products`).then((res: AxiosResponse) => {
 			setProducts(res.data);
 		});
 	}, []);
@@ -29,16 +31,29 @@ const Products: FC = () => {
 										<Card.Meta>price: ${el.price}</Card.Meta>
 										<Card.Description>{el.desc}</Card.Description>
 									</Card.Content>
-									<Card.Content extra>
-										<div className="ui two buttons">
-											<Button basic color="green">
-												<BiBasket />
-											</Button>
-											<Button basic color="blue">
-												View
-											</Button>
-										</div>
-									</Card.Content>
+									{ctx ? (
+										<Card.Content extra>
+											<div className="ui two buttons">
+												<Button basic color="green">
+													<BiBasket />
+												</Button>
+												<Button basic color="blue">
+													View
+												</Button>
+											</div>
+										</Card.Content>
+									) : (
+										<Card.Content extra>
+											<div className="ui two buttons">
+												<Button onClick={() => window.location.href = '/login'} basic color="green">
+													<BiBasket />
+												</Button>
+												<Button onClick={() => window.location.href = '/login'} basic color="blue">
+													View
+												</Button>
+											</div>
+										</Card.Content>
+									)}
 								</Card>
 							</Grid.Column>
 						);

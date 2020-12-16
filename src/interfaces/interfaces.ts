@@ -1,17 +1,17 @@
-export interface User {
+export interface IUser {
     username: string,
     email: string,
     phone: string,
     password: string,
-    orders: Array<Product>,
+    orders: Array<IProduct>,
     isAdmin: boolean
 }
 
-export interface Product {
+export interface IProduct {
     name: string,
     desc: string,
     price: number, 
     img: string,
     category: string,
-    postedBy: User
+    postedBy: IUser
 }
