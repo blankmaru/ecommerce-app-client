@@ -1,5 +1,5 @@
 export interface IUser {
-    id: string,
+    _id: string,
     username: string,
     email: string,
     phone: string,
@@ -9,6 +9,7 @@ export interface IUser {
 }
 
 export interface IProduct {
+    _id: string,
     name: string,
     desc: string,
     price: number, 

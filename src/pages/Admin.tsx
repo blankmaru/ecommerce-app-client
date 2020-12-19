@@ -1,9 +1,11 @@
-import React, { FC, useContext, useState } from 'react';
-import { Button, Form, Header, Modal } from 'semantic-ui-react';
+import React, { FC, useContext, useEffect, useState } from 'react';
+import { Button, Form, Header, Modal, Table } from 'semantic-ui-react';
 import { BsPlusSquare } from 'react-icons/bs';
 import { apiURL } from '../config';
 import Axios, { AxiosResponse } from 'axios';
 import { myContext } from '../context';
+import { IProduct } from '../interfaces/interfaces';
+import { AiOutlineDelete, AiOutlineReload } from 'react-icons/ai';
 
 const Admin: FC = () => {
 	const ctx = useContext(myContext);
@@ -13,7 +15,18 @@ const Admin: FC = () => {
 	const [price, setPrice] = useState<number>();
 	const [category, setCategory] = useState<string>('');
 
+	const [createdProducts, setCreatedProducts] = useState<Array<IProduct>>([]);
+
 	const [open, setOpen] = useState<boolean>(false);
+
+	useEffect(() => {
+		Axios.get(`${apiURL}/api/products`, {
+			withCredentials: true,
+		}).then((res: AxiosResponse) => {
+            setCreatedProducts(res.data);
+            console.log(res.data)
+		});
+	}, []);
 
 	const createProduct = () => {
 		Axios.post(
@@ -23,21 +36,29 @@ const Admin: FC = () => {
 				desc,
 				price,
 				category,
-				postedBy: ctx.id,
+				postedBy: ctx._id,
 			},
 			{
 				withCredentials: true,
 			}
-		).then((res: AxiosResponse) => {
-            if (res.data.message === 'success') {
-                setOpen(false);
-                window.location.href = '/'
-            }
-        })
-        .catch((err: Error) => {
-            console.log(err)
-        })
-    };
+		)
+			.then((res: AxiosResponse) => {
+				if (res.data.message === 'success') {
+					setOpen(false);
+					window.location.href = '/';
+				}
+			})
+			.catch((err: Error) => {
+				console.log(err);
+			});
+	};
+
+	const deleteProduct = (id: string) => {
+        console.log(id)
+		Axios.delete(`${apiURL}/api/products/${id}`, { withCredentials: true }).then((res: AxiosResponse) => {
+			window.location.href = '/admin';
+		});
+	};
 
 	return (
 		<div style={{ display: 'flex' }}>
@@ -71,8 +92,8 @@ const Admin: FC = () => {
 							<Form.Field>
 								<label>Price</label>
 								<input
-                                    placeholder="Price $$$"
-                                    type="number"
+									placeholder="Price $$$"
+									type="number"
 									value={price}
 									onChange={(e) => setPrice(parseInt(e.target.value))}
 								/>
@@ -88,11 +109,11 @@ const Admin: FC = () => {
 							</Form.Field> */}
 							<Form.Field>
 								<label>Category</label>
-                                <select onChange={(e) => setCategory(e.target.value)}>
-                                    <option value="Shoes">Shoes</option>
-                                    <option value="Bags">Bags</option>
-                                    <option value="Shorts">Shorts</option>
-                                </select>
+								<select onChange={(e) => setCategory(e.target.value)}>
+									<option value="Shoes">Shoes</option>
+									<option value="Bags">Bags</option>
+									<option value="Shorts">Shorts</option>
+								</select>
 							</Form.Field>
 						</Form>
 					</Modal.Content>
@@ -112,6 +133,38 @@ const Admin: FC = () => {
 			</div>
 			<div style={{ marginLeft: '2rem' }}>
 				<Header>Created products</Header>
+				<Table striped style={{ width: '500px' }}>
+					<Table.Header>
+						<Table.Row>
+							<Table.HeaderCell>Name</Table.HeaderCell>
+							<Table.HeaderCell>Price</Table.HeaderCell>
+							<Table.HeaderCell>Delete</Table.HeaderCell>
+                            <Table.HeaderCell>Update</Table.HeaderCell>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{createdProducts.map((item) => {
+							return (
+								<Table.Row>
+									<Table.Cell>{item.name}</Table.Cell>
+									<Table.Cell>{item.price}</Table.Cell>
+									<Table.Cell>
+										<AiOutlineDelete
+											onClick={() => deleteProduct(item._id)}
+											style={{ cursor: 'pointer' }}
+										/>
+									</Table.Cell>
+                                    <Table.Cell>
+										<AiOutlineReload
+											onClick={() => deleteProduct(item._id)}
+											style={{ cursor: 'pointer' }}
+										/>
+									</Table.Cell>
+								</Table.Row>
+							);
+						})}
+					</Table.Body>
+				</Table>
 			</div>
 		</div>
 	);
