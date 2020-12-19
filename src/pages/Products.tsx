@@ -25,7 +25,7 @@ const Products: FC = () => {
 					{products.map((el) => {
 						return (
 							<Grid.Column width={4}>
-								<Card>
+								<Card style={{height: '250px'}}>
 									<Card.Content>
 										<Card.Header>{el.name}</Card.Header>
 										<Card.Meta>price: ${el.price}</Card.Meta>

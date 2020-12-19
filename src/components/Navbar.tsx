@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { myContext } from '../context';
 import { FiLogOut } from 'react-icons/fi'
 import { logOut } from '../config';
-
+import { BiCart } from 'react-icons/bi';
 
 const Navbar: FC = () => {
 	const ctx = useContext(myContext);
@@ -26,9 +26,16 @@ const Navbar: FC = () => {
 						<Menu.Item>
 							<Link to="/profile">Profile</Link>
 						</Menu.Item>
-						<Menu.Item onClick={logOut} position="right">
-							<Link to="/logout"><FiLogOut /></Link>
-						</Menu.Item>
+						<Menu.Menu position="right">
+							<Menu.Item>
+								<Link to="/cart">
+									<BiCart />
+								</Link>
+							</Menu.Item>
+							<Menu.Item onClick={logOut}>
+								<Link to="/logout"><FiLogOut /></Link>
+							</Menu.Item>
+						</Menu.Menu>
 					</>
 				) : (
 					<Menu.Menu position="right">

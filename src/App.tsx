@@ -5,7 +5,7 @@ import { Container } from 'semantic-ui-react';
 
 import Navbar from './components/Navbar';
 import Products from './pages/Products';
-import Footer from './components/Footer';
+// import Footer from './components/Footer';
 import Admin from './pages/Admin';
 import Profile from './pages/Profile';
 import Orders from './pages/Orders';
